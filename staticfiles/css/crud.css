@@ -1,0 +1,36 @@
+.aviso-card {
+    position: relative;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.aviso-card:hover{
+    background-color: #f0f0f069;
+}
+
+.aviso-delete {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+
+    opacity: 0;
+    pointer-events: none;
+
+    transition: opacity 0.2s;
+}
+
+.aviso-update {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+
+    opacity: 0;
+    pointer-events: none;
+
+    transition: opacity 0.2s;
+}
+
+.aviso-card:hover .aviso-delete {
+    opacity: 1;
+    pointer-events: auto;
+}

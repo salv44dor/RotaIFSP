@@ -1,0 +1,22 @@
+html, body {
+    height: 100%;
+    margin: 0;
+}
+
+body{
+    display: flex;
+    flex-direction: column;
+    font-family: 'Inter', sans-serif;
+}
+
+header{
+    flex-shrink: 0;
+}
+
+main{
+    flex: 1;
+}
+
+#informacao_cadastro{
+    background: url("https://placeholderimage.co/300x200/EEEEEE/31343C") no-repeat center / cover;
+}

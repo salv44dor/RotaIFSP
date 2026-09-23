@@ -1,0 +1,58 @@
+:root{
+    --primary-yellow: #F3C67Bff !important;
+    --primary-gray: #E9EAEDff !important;
+    --primary-green: #45863d !important;
+    --secondary-green: #316d2b !important;
+    
+    /*--primary-yellow-light: #F3C67Bff;
+    --primary-gray-light: #E9EAEDff;
+    --primary-green-light: #5C8857ff;*/
+
+    --white: #FEFDFEff !important;
+}
+body{
+    font-family: 'Inter', sans-serif;
+}
+
+
+.primary-text{
+    color: var(--primary-green);
+    font-weight: 400;
+}
+.secondary-text{
+    color: var(--secondary-green);
+}
+.fs-hint{
+    font-size: 15px;
+}
+
+
+.p-2left{
+    padding: .5em .7em .5em .8em;
+}
+
+
+
+
+
+.form-control:focus,.form-select:focus {
+    border-color: var(--primary-green) !important;
+    box-shadow: 0 0 0 0.15rem rgba(25, 135, 84, 0.15) !important;
+    transition: border-color 0.25s ease, box-shadow 0.25s ease !important;
+}
+.password-wrapper {
+    display: flex;
+    align-items: center;
+}
+.password-wrapper input {
+    flex: 1;
+}
+.password-wrapper input:focus {
+    outline: none;
+    box-shadow: none;
+}
+.password-wrapper:focus-within {
+    border-color: var(--primary-green) !important;
+    box-shadow: 0 0 0 0.15rem rgba(25, 135, 84, 0.15) !important;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease !important;
+}

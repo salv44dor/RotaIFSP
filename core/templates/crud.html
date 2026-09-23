@@ -1,0 +1,229 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Rota IFSP - CRUD {% endblock title %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/crud.css' %}">
+{% endblock extra_css %}
+
+
+{% block content %}
+
+<div>
+    <div class="container my-4">
+        <h2 class="fs-5">ℹ - Esta é uma página simples de CRUD utilizando o framework Django. Foi desenvolvida para a disciplina <span class="w-bold">Desenvolvimento de Web Sites 2</span></h2>
+    </div>
+    <div class="container-xl d-flex col gap-2">
+        <div class="container-fluid border rounded p-3">
+            <h2 class="fs-5 text-center">Avisos - Gerenciar</h2>
+
+            <div class="p-2">
+                <form method="post" action="/crud/create">
+                    {% csrf_token %}
+                    <legend style="font-size: 15px" class="text-center text-secondary">Formulário de criação de Avisos</legend>
+                    
+                    <div class="mb-3">
+                        <label for="titulo_aviso" class="form-label">Título do aviso</label>
+                        <input type="text" name="titulo_aviso" id="titulo_aviso" required placeholder="Título" class="form-control" style="font-size: 15px">
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="descricao" class="form-label">Descrição</label>
+                        <textarea name="descricao" id="descricao" class="form-control" required style="resize:none; height: 80px; font-size: 15px" placeholder="Digite aqui seu aviso"></textarea>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label for="tipo_destinatario" class="form-label">Tipo de destinatário</label>
+                        <select name="tipo_destinatario" id="tipo_destinatario" class="form-select" style="font-size: 15px">
+                            <option selected class="text-secondary" disabled>Selecione o tipo</option>
+                            <option value="TODOS">Enviar a todos</option>
+                            <option value="ALUNOS">Enviar apenas a alunos</option>
+                            <option value="MOTORISTAS">Enviar apenas a motoristas</option>
+                        </select>
+                    </div>
+                    
+                    <div>
+                        <button type="submit" class="btn btn-success">Enviar aviso</button>
+                        <button type="reset" class="btn btn-secondary">Limpar</button>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+
+        <!-- Button trigger modal
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+        Launch demo modal
+        </button>-->
+
+        <!-- Modal -->
+        <div class="modal fade" id="exampleModal">
+            <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="staticBackdropLabel">Formulário de edição de Avisos</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form method="POST">
+                            {% csrf_token %}
+                            
+                            <div class="mb-3">
+                                <label for="titulo_aviso_upd" class="form-label">Título do aviso</label>
+                                <input type="text" name="titulo_aviso_upd" id="titulo_aviso_upd" required placeholder="Título" class="form-control" style="font-size: 15px">
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="descricao_upd" class="form-label">Descrição</label>
+                                <textarea name="descricao_upd" id="descricao_upd" class="form-control" required style="resize:none; height: 80px; font-size: 15px" placeholder="Digite aqui seu aviso"></textarea>
+                            </div>
+                            
+                            <div class="mb-5">
+                                <label for="tipo_destinatario_upd" class="form-label">Tipo de destinatário</label>
+                                <select name="tipo_destinatario_upd" id="tipo_destinatario_upd" class="form-select" style="font-size: 15px">
+                                    <option selected class="text-secondary" disabled>Selecione o tipo</option>
+                                    <option value="TODOS">Enviar a todos</option>
+                                    <option value="ALUNOS">Enviar apenas a alunos</option>
+                                    <option value="MOTORISTAS">Enviar apenas a motoristas</option>
+                                </select>
+                            </div>
+                            
+                            <div class="mb-4">
+                                <button type="button" class="btn btn-success" onclick="updateAviso()">Atualizar aviso</button>
+                                <button type="reset" class="btn btn-secondary">Limpar</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="container-fluid border rounded p-4 d-flex flex-column" style="height: 460px;">
+            <h2 class="fs-5 text-center">Avisos - Listagem</h2>
+            <legend style="font-size: 15px" class="text-center text-secondary">Listagem de avisos criados</legend>
+
+            <div class="d-flex flex-column p-3 gap-2 overflow-auto flex-grow-1" style="min-height: 0;">
+                {% for aviso in avisos  %}
+                    <div class="border rounded p-3 pb-0 pe-auto aviso-card" onclick="abrirAviso({{ aviso.id_aviso }})">
+                        <button type="button" class="btn btn-danger btn-sm aviso-delete" onclick="event.stopPropagation(); excluirAviso({{ aviso.id_aviso }})">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash3-fill" viewBox="0 0 16 16">
+                                <path d="M11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66A2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84L2.038 3.5H1.5a.5.5 0 0 1 0-1H5v-1A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5m-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5M4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06m6.53-.528a.5.5 0 0 0-.528.47l-.5 8.5a.5.5 0 0 0 .998.058l.5-8.5a.5.5 0 0 0-.47-.528M8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0V5a.5.5 0 0 0-.5-.5"/>
+                            </svg>
+                        </button>
+                        <h3 style="font-size: 17px">{{aviso.titulo_aviso}}</h3>
+                        <p style="font-size: 13px" class="text-break">{{aviso.descricao}}</p>
+                        <div class="d-flex justify-content-between mt-4 mb-1">
+                            <p style="font-size: 12px" class="my-0">Administração</p>
+                            <p style="font-size: 12px" class="my-0">Enviado para {{aviso.tipo_destinatario|lower}}</p>
+                        </div>
+                        <div class="d-flex justify-content-end mb-2">
+                            <p style="font-size: 11px" class="text-secondary my-0">DD/MM/YYYY hh:ii</p>
+                        </div>
+                    </div>
+                {% empty %}
+                    <h2 class="text-center text-secondary" style="font-size: 15px; font-weight: 100">Ainda não foram enviados avisos...</h2>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}
+
+{% block js %}
+<script>
+    let lastAviso = null;
+
+    function abrirAviso(idAviso) {
+        const modal = document.getElementById("exampleModal");
+        const nModal = new bootstrap.Modal(modal);
+        nModal.show();
+
+        lastAviso = idAviso;
+    }
+
+
+    function excluirAviso(idAviso) {
+        fetch(`/crud/delete/${idAviso}`, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': getCookie('csrftoken'),
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+
+            if (data.success) {
+                location.reload();
+
+            } else {
+                alert(data.error);
+            }
+        })
+        .catch(error => {
+            console.error('Erro:', error);
+        });
+        
+        lastAviso = null;
+    }
+
+    function updateAviso() {
+    const idAviso = lastAviso;
+
+    const titulo = document.getElementById("titulo_aviso_upd").value;
+    const descricao = document.getElementById("descricao_upd").value;
+    const tipoDestinatario = document.getElementById("tipo_destinatario_upd").value;
+
+    fetch(`/crud/update/${idAviso}`, {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': getCookie('csrftoken'),
+            'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: new URLSearchParams({
+            titulo_aviso_upd: titulo,
+            descricao_upd: descricao,
+            tipo_destinatario_upd: tipoDestinatario
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            location.reload();
+        } else {
+            alert(data.error);
+        }
+    })
+    .catch(error => {
+        console.error('Erro:', error);
+    });
+}
+
+
+    function getCookie(name) {
+        let cookieValue = null;
+
+        if (document.cookie && document.cookie !== '') {
+
+            const cookies = document.cookie.split(';');
+
+            for (let cookie of cookies) {
+
+                cookie = cookie.trim();
+
+                if (cookie.startsWith(name + '=')) {
+                    cookieValue = decodeURIComponent(
+                        cookie.substring(name.length + 1)
+                    );
+
+                    break;
+                }
+            }
+        }
+
+        return cookieValue;
+    }
+</script>
+{% endblock js %}

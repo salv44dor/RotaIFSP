@@ -1,0 +1,13 @@
+body {
+    background: url('../img/login_background.png') no-repeat center / cover;
+}
+
+.btn{
+    transition: background-color 0.15s ease !important;
+    background-color: var(--primary-green);
+    border-color: var(--primary-green);
+}
+.btn:hover{
+    background-color: var(--secondary-green);
+    border-color: var(--secondary-green);
+}
